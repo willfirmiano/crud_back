@@ -10,11 +10,14 @@
 | to using a Closure or controller method. Build something great!
 |
 */
-
+/*
 Route::group(['middleware' => 'cors'], function() {
     Route::get('/', function () {
         return view('welcome');
     });
 
     Route::resource('books', 'BooksController@index');
+
+    Route::post('add', 'BooksController@add');
 });
+*/

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Books;
 use App\Http\Requests;
+use Illuminate\Support\Facades\App;
 
 class BooksController extends Controller
 {
@@ -15,7 +16,8 @@ class BooksController extends Controller
      */
     public function index()
     {
-        $books = Books::all();
+        //$books = Books::all()->sortByDesc('id');
+        $books = Books::orderBy('id', 'desc')->get();
 
         return $books;
     }
@@ -23,11 +25,19 @@ class BooksController extends Controller
     /**
      * Show the form for creating a new resource.
      *
+     * @param \Illuminate\Http\Request
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function add(Request $request)
     {
-        //
+        $book = new Books();
+
+        $book->title = $request->title;
+        $book->description = $request->description;
+
+        $book->value = number_format($request->value, 2, '.', ',');
+
+        $book->save();
     }
 
     /**
@@ -78,11 +88,13 @@ class BooksController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function remove(Request $request)
     {
-        //
+        \App\Books::destroy($request->id);
+
+        return response()->json(['status' => 'success']);
     }
 }
