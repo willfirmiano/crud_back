@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Books;
 use App\Http\Requests;
 use Illuminate\Support\Facades\App;
+use Mockery\CountValidator\Exception;
 
 class BooksController extends Controller
 {
@@ -35,9 +36,16 @@ class BooksController extends Controller
         $book->title = $request->title;
         $book->description = $request->description;
 
-        $book->value = number_format($request->value, 2, '.', ',');
+        //$book->value = number_format($request->value, 2, '.', ',');
+        $book->value = $request->value;
 
-        $book->save();
+        try {
+            $book->save();
+
+            return response()->json(['status' => 'success']);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'exception' => $e->getMessage()]);
+        }
     }
 
     /**
